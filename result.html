@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #003366;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 40px 60px;
+        }
+
+        h2 {
+            color: #003366;
+        }
+
+        .result-info {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: space-around;
+        }
+
+        .image-block {
+            flex: 1 1 250px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .image-block h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .image-block img {
+            max-width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            background-color: #003366;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #00509e;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .images {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Forgery Detection System</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/metrics">Metrics</a>
+            <a href="/model_info">Model Info</a>
+            <a href="/about">About Me</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🔍 Detection Result</h2>
+
+        <div class="result-info">
+            <p><strong>Prediction:</strong> {{ label }}</p>
+            <p><strong>Confidence:</strong> {{ confidence }}%</p>
+        </div>
+
+        <div class="images">
+            <div class="image-block">
+                <h3>Original Image</h3>
+                <img src="{{ url_for('static', filename=original_image) }}" alt="Original Image">
+            </div>
+            <div class="image-block">
+                <h3>Saliency Map</h3>
+                <img src="{{ url_for('static', filename=result_images['saliency']) }}" alt="Saliency Map">
+            </div>
+            <div class="image-block">
+                <h3>Morphological Mask</h3>
+                <img src="{{ url_for('static', filename=result_images['morph']) }}" alt="Morphological Mask">
+            </div>
+            <div class="image-block">
+                <h3>Segmentation Mask</h3>
+                <img src="{{ url_for('static', filename=result_images['mask']) }}" alt="Segmentation Mask">
+            </div>
+            <div class="image-block">
+                <h3>Red Mask Overlay</h3>
+                <img src="{{ url_for('static', filename=result_images['red_overlay']) }}" alt="Red Mask Overlay">
+            </div>
+        </div>
+
+        <a href="/" class="btn">🔁 Try Another Image</a>
+    </div>
+
+</body>
+</html>

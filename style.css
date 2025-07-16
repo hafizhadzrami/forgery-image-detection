@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    background-color: #f2f6fc;
+    color: #1a1a1a;
+}
+
+.sidebar {
+    width: 220px;
+    height: 100%;
+    background: #1e3a8a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 30px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar a {
+    display: block;
+    color: #e0eaff;
+    padding: 14px 25px;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.sidebar a:hover {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.content {
+    margin-left: 240px;
+    padding: 40px;
+    background-color: #f2f6fc;
+    min-height: 100vh;
+}
+
+h1, h2, h3 {
+    color: #1e3a8a;
+}
+
+button {
+    padding: 12px 28px;
+    background-color: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+.upload-section {
+    margin-top: 30px;
+}
+
+.dropbox {
+    margin-top: 20px;
+    padding: 60px;
+    border: 3px dashed #93c5fd;
+    background-color: #eff6ff;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.3s ease;
+    color: #1e40af;
+}
+
+.dropbox:hover {
+    background-color: #dbeafe;
+    border-color: #3b82f6;
+}
+
+.dropbox img {
+    width: 80px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.label-file {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #1e3a8a;
+    color: #e0eaff;
+    font-size: 14px;
+}

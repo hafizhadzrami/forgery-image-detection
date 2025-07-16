@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Info</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #003366;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar h1 {
+            color: white;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 40px 60px;
+        }
+
+        h2 {
+            color: #003366;
+            margin-bottom: 20px;
+        }
+
+        .block {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .block h3 {
+            margin-top: 0;
+            color: #004080;
+        }
+
+        pre {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Forgery Detection System</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/metrics">Metrics</a>
+            <a href="/model_info">Model Info</a>
+            <a href="/about">About Me</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🧬 Model Information</h2>
+
+        <div class="block">
+            <h3>📌 Classification Model</h3>
+            <p><strong>Architecture:</strong> Custom CNN</p>
+            <p><strong>Input Size:</strong> 224x224x3</p>
+            <p><strong>Total Parameters:</strong> 19,265,729</p>
+            <p><strong>Trainable Parameters:</strong> 19,264,769</p>
+            <p><strong>Non-trainable Parameters:</strong> 960</p>
+            <p><strong>Dataset:</strong></p>
+            <ul>
+                <li>Training: 9,098 images</li>
+                <li>Validation: 1,952 images</li>
+                <li>Testing: 1,950 images</li>
+                <li>Classes: 2 (Authentic, Tampered)</li>
+            </ul>
+            <p><strong>Layer Summary:</strong></p>
+            <pre>
+Conv2D(32) → BatchNorm → MaxPool →
+Conv2D(64) → BatchNorm → MaxPool →
+Conv2D(128) → BatchNorm → MaxPool →
+Conv2D(256) → BatchNorm → MaxPool →
+Flatten → Dense(512) → Dropout → Dense(1)
+            </pre>
+        </div>
+
+        <div class="block">
+            <h3>🧠 Segmentation Model</h3>
+            <p><strong>Architecture:</strong> U-Net</p>
+            <p><strong>Input Size:</strong> 224x224x3</p>
+            <p><strong>Loss Function:</strong> Binary Crossentropy + Dice Loss</p>
+            <p><strong>Metrics:</strong> Accuracy, Dice Coefficient, Precision, Recall, F1-Score</p>
+            <p><strong>Dataset:</strong></p>
+            <ul>
+                <li>920 Tampered Images</li>
+                <li>920 Ground Truth Masks</li>
+            </ul>
+            <p><strong>Encoder:</strong></p>
+            <pre>
+Conv2D(64) → BatchNorm → Conv2D(64) → BatchNorm → MaxPool →
+Conv2D(128) → BatchNorm → Conv2D(128) → BatchNorm → MaxPool →
+Conv2D(256) → BatchNorm → Conv2D(256) → BatchNorm
+            </pre>
+            <p><strong>Decoder:</strong></p>
+            <pre>
+UpSample → Concat → Conv2D(128) → BatchNorm → Conv2D(128) → BatchNorm →
+UpSample → Concat → Conv2D(64) → BatchNorm → Conv2D(64) → BatchNorm →
+Conv2D(1) with Sigmoid Activation
+            </pre>
+        </div>
+    </div>
+
+</body>
+</html>

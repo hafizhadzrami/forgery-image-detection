@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Evaluation Metrics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        /* Navbar style */
+        .navbar {
+            background-color: #003366;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar h1 {
+            color: white;
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        h2 {
+            color: #003366;
+        }
+
+        .section {
+            margin: 40px 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #ddd;
+        }
+
+        .metrics-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metrics-grid img {
+            width: 32%;
+            height: 300px;
+            object-fit: contain;
+            border: 1px solid #ccc;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .json-raw {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid img {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>Forgery Detection System</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/metrics">Metrics</a>
+            <a href="/model_info">Model Info</a>
+            <a href="/about">About Me</a>
+        </div>
+    </div>
+
+    <!-- Classification Section -->
+    <div class="section">
+        <h2>🧠 Classification Metrics</h2>
+
+         <!-- Per-class metrics table -->
+        <table>
+            <tr>
+                <th>Class</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Support</th>
+            </tr>
+            {% for label, metrics in class_metrics.items() %}
+            <tr>
+                <td>
+                    {% if label == 0 or label == '0' %}
+                        Authentic
+                    {% elif label == 1 or label == '1' %}
+                        Forgery
+                    {% else %}
+                        {{ label }}
+                    {% endif %}
+                </td>                
+                <td>{{ '%.4f'|format(metrics['precision']) }}</td>
+                <td>{{ '%.4f'|format(metrics['recall']) }}</td>
+                <td>{{ '%.4f'|format(metrics['f1-score']) }}</td>
+                <td>{{ metrics['support'] }}</td>
+            </tr>
+            {% endfor %}
+         </table>
+
+        <!-- 🆕 Overall summary metrics table -->
+         <h3>📊 Overall Metrics</h3>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Accuracy</td>
+                <td>{{ '%.4f'|format(overall_metrics['accuracy']) }}</td>
+             </tr>
+            <tr>
+                <td>Macro Avg F1-Score</td>
+                <td>{{ '%.4f'|format(overall_metrics['macro avg']['f1-score']) }}</td>
+            </tr>
+             <tr>
+                <td>Weighted Avg F1-Score</td>
+                <td>{{ '%.4f'|format(overall_metrics['weighted avg']['f1-score']) }}</td>
+             </tr>
+            {% if overall_metrics['auc_roc'] is defined %}
+            <tr>
+                <td>AUC-ROC</td>
+                <td>{{ '%.4f'|format(overall_metrics['auc_roc']) }}</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    <!-- Classification graphs -->
+    <h3>📷 Graphs:</h3>
+    <div class="metrics-grid">
+        <img src="{{ url_for('static', filename='result/classification/confusion_matrix.png') }}" alt="Confusion Matrix">
+        <img src="{{ url_for('static', filename='result/classification/training_accuracy.png') }}" alt="Training Accuracy">
+        <img src="{{ url_for('static', filename='result/classification/training_loss.png') }}" alt="Training Loss">
+    </div>
+</div>
+
+
+    <!-- Segmentation Section -->
+    <div class="section">
+        <h2>🧬 Segmentation Metrics</h2>
+        <table>
+            <tr>
+                {% for key in seg_metrics.keys() %}
+                    <th>{{ key|capitalize }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for value in seg_metrics.values() %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+
+        <h3>🖼️ Graphs:</h3>
+        <div class="metrics-grid">
+            <img src="{{ url_for('static', filename='result/segmentation/loss_plot.png') }}" alt="Segmentation Loss">
+            <img src="{{ url_for('static', filename='result/segmentation/dice_plot.png') }}" alt="Dice Coefficient">
+            <img src="{{ url_for('static', filename='result/segmentation/roc_auc_curve.png') }}" alt="ROC Curve">
+        </div>
+    </div>
+
+</body>
+</html>

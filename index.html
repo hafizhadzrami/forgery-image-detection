@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forgery Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f8f9fc;
+        }
+
+        /* Navbar style */
+        .navbar {
+            background-color: #1a3f78;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 22px;
+            color: white;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Centered Card */
+        .container {
+            max-width: 600px;
+            background-color: white;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 25px;
+        }
+
+        .dropbox {
+            border: 2px dashed #aaa;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dropbox:hover {
+            border-color: #007BFF;
+            background-color: #f4faff;
+        }
+
+        .dropbox img {
+            width: 50px;
+            margin-bottom: 10px;
+        }
+
+        #file-upload {
+            display: none;
+        }
+
+        .preview {
+            margin-top: 20px;
+        }
+
+        .preview img {
+            max-width: 300px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+
+        button[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 30px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .result {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <div class="navbar">
+        <h1>Forgery Detection System</h1>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/metrics">Metrics</a>
+            <a href="/model_info">Model Info</a>
+            <a href="/about">About Me</a>
+        </div>
+    </div>
+
+    <!-- Main Upload Card -->
+    <div class="container">
+        <h2>Upload Image for Analysis</h2>
+        <form method="POST" action="/predict" enctype="multipart/form-data">
+            <div class="dropbox" id="dropbox">
+                <img src="{{ url_for('static', filename='upload-icon.png') }}" alt="Upload Icon">
+                <p>Drag & drop image here or click to browse</p>
+                <input type="file" name="image" id="file-upload" accept="image/*" required>
+            </div>
+            <div class="preview" id="preview"></div>
+            <button type="submit">Analyze Image</button>
+        </form>
+
+        {% if label %}
+        <div class="result" style="color: {{ 'green' if 'Authentic' in label else 'red' }}">
+            Analysis Result: {{ label }} ({{ confidence }}% confidence)
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- JS Preview Script -->
+    <script>
+        const dropbox = document.getElementById('dropbox');
+        const fileInput = document.getElementById('file-upload');
+        const preview = document.getElementById('preview');
+
+        dropbox.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+
+        dropbox.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropbox.style.borderColor = '#007BFF';
+            dropbox.style.backgroundColor = '#eef7ff';
+        });
+
+        dropbox.addEventListener('dragleave', () => {
+            dropbox.style.borderColor = '#aaa';
+            dropbox.style.backgroundColor = 'transparent';
+        });
+
+        dropbox.addEventListener('drop', e => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+    </script>
+
+</body>
+</html>

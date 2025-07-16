@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Metrics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Evaluation Metrics</h1>
+
+        <h2>Classification Metrics</h2>
+        <ul>
+            {% for key, value in class_metrics.items() %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Training Graphs</h2>
+        <ul>
+            {% for key, value in class_graphs.items() %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+
+        <hr>
+
+        <h2>Segmentation Metrics</h2>
+        <ul>
+            {% for key, value in seg_metrics.items() %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
